@@ -17,5 +17,3 @@ class RoomsResponse {
     "data": data?.map((i) => i.toJson()).toList(),
   };
 }
-
-
