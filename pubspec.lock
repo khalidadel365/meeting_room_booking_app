@@ -68,7 +68,7 @@ packages:
   dio:
     dependency: "direct main"
     description:
-      name: api
+      name: dio
       sha256: aff32c08f92787a557dd5c0145ac91536481831a01b4648136373cddb0e64f8c
       url: "https://pub.dev"
     source: hosted

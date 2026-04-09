@@ -1,7 +1,8 @@
 class AppStrings {
   static const String appName = 'Meeting Room Booking App';
+  static const String roomBooking = 'Room Booking';
   static const String bookNow = 'Book Now';
-  static const String explore = 'Explore';
+  static const String exploreRooms = 'Explore Rooms';
   static const String capacity = 'Capacity';
   static const String status = 'Status';
   static const String reservedBy = 'Reserved By';
