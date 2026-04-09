@@ -5,6 +5,18 @@ class AppTextStyles {
 
   static const String fontFamily = 'Inter';
 
+  static const textStyleBold15 = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+  );
+  static const textStyleSemiBold15 = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w400,
+  );
+  static const textStyleSemiBold45 = TextStyle(
+    fontSize: 45,
+    fontWeight: FontWeight.w600,
+  );
   static const textStyleBold25 = TextStyle(
     fontSize: 25,
     fontWeight: FontWeight.bold,
@@ -51,7 +63,6 @@ class AppTextStyles {
     fontWeight: FontWeight.w500,
   );
 
-  // Regular
   static const textStyleRegular24 = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.normal,

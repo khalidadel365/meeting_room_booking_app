@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:meeting_room_booking_app/core/theme/app_text_styles.dart';
+import 'package:meeting_room_booking_app/core/values/app_strings.dart';
+import 'package:meeting_room_booking_app/core/widgets/custom_button.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 
@@ -8,13 +11,54 @@ class RoomItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 170,
+      height: 210,
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(),
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 12,
+          bottom: 18,
+          right: 32.0,
+          left: 32,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('A', style: AppTextStyles.textStyleSemiBold45),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(Icons.people, color: AppColors.iconColor, size: 24),
+                const SizedBox(width: 8),
+                Text('capacity: 10', style: AppTextStyles.textStyleSemiBold15),
+                const Spacer(),
+                Icon(Icons.analytics, color: AppColors.primaryColor, size: 24),
+                const SizedBox(width: 8),
+                Text('status: draft', style: AppTextStyles.textStyleSemiBold15),
+              ],
+            ),
+            const Spacer(),
+            Align(
+              alignment: Alignment.center,
+              child: CustomButton(
+                backgroundColor: AppColors.primaryColor,
+                borderRadius: 8,
+                width: 150,
+                height: 50,
+                text: AppStrings.bookNow,
+                textStyle: AppTextStyles.textStyleBold15.copyWith(
+                  color: AppColors.whiteColor,
+                ),
+                onPressed: () {},
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
