@@ -75,6 +75,7 @@ class BookingCubit extends Cubit<BookingStates> {
     ) {
       emit(CreateBookingSuccess(newBooking));
       _clearControllers();
+      handleIntent(GetBookingsOfRoomIntent(roomId: roomId));
     });
   }
 

@@ -34,7 +34,7 @@ class ServerFailure extends Failure {
         return ServerFailure('There is Connection Error');
       case DioExceptionType.unknown:
         return ServerFailure('No Internet Connection');
-      }
+    }
   }
 
   factory ServerFailure.fromResponse(int statusCode, dynamic response) {

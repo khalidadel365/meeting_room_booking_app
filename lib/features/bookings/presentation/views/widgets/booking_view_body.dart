@@ -4,6 +4,7 @@ import 'package:meeting_room_booking_app/core/theme/app_colors.dart';
 import 'package:meeting_room_booking_app/core/theme/app_text_styles.dart';
 import 'package:meeting_room_booking_app/core/values/app_strings.dart';
 
+import '../../../../../core/utilities/functions/show_snack_bar.dart';
 import '../../view_model/cubit/booking_cubit.dart';
 import '../../view_model/intent/booking_intents.dart';
 import '../../view_model/state/booking_state.dart';
@@ -19,52 +20,70 @@ class BookingViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<BookingCubit>();
 
-    return CustomScrollView(
-      slivers: [
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12.0),
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocBuilder<BookingCubit, BookingStates>(
-                  buildWhen: (previous, current) =>
-                  current is CreateBookingLoading ||
-                      current is CreateBookingSuccess ||
-                      current is CreateBookingError,
-                  builder: (context, state) {
-                    return BookingDetailsSection(
-                      nameController: cubit.nameController,
-                      dateController: cubit.dateController,
-                      startTimeController: cubit.startTimeController,
-                      endTimeController: cubit.endTimeController,
-                      isLoading: state is CreateBookingLoading,
-                      onDateTap: () =>
-                          cubit.handleIntent(SelectDateIntent(context)),
-                      onStartTimeTap: () =>
-                          cubit.handleIntent(SelectStartTimeIntent(context)),
-                      onEndTimeTap: () =>
-                          cubit.handleIntent(SelectEndTimeIntent(context)),
-                      onConfirm: () =>
-                          cubit.handleIntent(ConfirmBookingIntent(roomId: roomId)),
-                    );
-                  },
-                ),
-                const SizedBox(height: 15),
-                Text(
-                  AppStrings.scheduleOverview,
-                  style: AppTextStyles.textStyleRegular20.copyWith(
-                    color: AppColors.primaryColor,
+    return BlocListener<BookingCubit, BookingStates>(
+      listener: (context, state) {
+        if (state is CreateBookingSuccess) {
+          showSnackBar(
+            context: context,
+            message: "Booking Confirmed Successfully!",
+            color: Colors.green,
+          );
+        } else if (state is CreateBookingError) {
+          showSnackBar(
+            context: context,
+            message: state.message,
+            color: Colors.red,
+          );
+        }
+      },
+      child: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12.0),
+            sliver: SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BlocBuilder<BookingCubit, BookingStates>(
+                    buildWhen: (previous, current) =>
+                        current is CreateBookingLoading ||
+                        current is CreateBookingSuccess ||
+                        current is CreateBookingError,
+                    builder: (context, state) {
+                      return BookingDetailsSection(
+                        nameController: cubit.nameController,
+                        dateController: cubit.dateController,
+                        startTimeController: cubit.startTimeController,
+                        endTimeController: cubit.endTimeController,
+                        isLoading: state is CreateBookingLoading,
+                        onDateTap: () =>
+                            cubit.handleIntent(SelectDateIntent(context)),
+                        onStartTimeTap: () =>
+                            cubit.handleIntent(SelectStartTimeIntent(context)),
+                        onEndTimeTap: () =>
+                            cubit.handleIntent(SelectEndTimeIntent(context)),
+                        onConfirm: () => cubit.handleIntent(
+                          ConfirmBookingIntent(roomId: roomId),
+                        ),
+                      );
+                    },
                   ),
-                ),
-                const SizedBox(height: 10),
-              ],
+                  const SizedBox(height: 15),
+                  Text(
+                    AppStrings.scheduleOverview,
+                    style: AppTextStyles.textStyleRegular20.copyWith(
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
-        ),
-        const BookingSliverList(),
-        const SliverToBoxAdapter(child: SizedBox(height: 20)),
-      ],
+          const BookingSliverList(),
+          const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        ],
+      ),
     );
   }
 }

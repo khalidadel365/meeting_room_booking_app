@@ -35,13 +35,11 @@ class BookingSliverList extends StatelessWidget {
             ),
           );
         } else {
-          return SliverToBoxAdapter(
+          return SliverFillRemaining(
             child: Center(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 20),
-                child: CircularProgressIndicator(
-                  color: AppColors.primaryColor,
-                ),
+                child: CircularProgressIndicator(color: AppColors.primaryColor),
               ),
             ),
           );
