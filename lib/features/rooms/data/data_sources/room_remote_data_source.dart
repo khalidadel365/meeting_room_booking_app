@@ -11,7 +11,7 @@ abstract class RoomRemoteDataSourceContract {
 class RoomRemoteDataSourceImpl implements RoomRemoteDataSourceContract {
   final ApiService apiService;
 
-  RoomRemoteDataSourceImpl(this.apiService);
+  RoomRemoteDataSourceImpl({required this.apiService});
 
   @override
   Future<List<RoomDto>> fetchRooms() async {
