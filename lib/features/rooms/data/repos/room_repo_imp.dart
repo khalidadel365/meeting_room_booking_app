@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:meeting_room_booking_app/features/rooms/data/data_sources/room_remote_data_source.dart';
 import 'package:meeting_room_booking_app/features/rooms/domain/repos/room_repo_contract.dart';
 
@@ -17,7 +18,10 @@ class RoomRepoImp implements RoomRepoContract {
       final roomEntities = roomsDTO.map((dto) => dto.toDomain()).toList();
       return Right(roomEntities);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      if (e is DioException) {
+        return Left(ServerFailure.fromDioException(e));
+      }
+      return Left(ServerFailure('Opps there was an error, please try again'));
     }
   }
 }

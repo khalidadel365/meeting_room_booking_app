@@ -23,8 +23,18 @@ class RoomsSliverList extends StatelessWidget {
             ),
           );
         } else if (state is FetchRoomsError) {
-          return SliverToBoxAdapter(
-            child: Center(child: Text(state.errorMessage)),
+          return SliverFillRemaining(
+            hasScrollBody: false,
+            child: Center(
+              child: Text(
+                "Opps there was an error, please try again later",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
           );
         } else {
           return SliverFillRemaining(
