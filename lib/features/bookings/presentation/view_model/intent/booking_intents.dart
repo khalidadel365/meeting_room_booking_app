@@ -8,12 +8,26 @@ class SelectDateIntent extends BookingIntents {
   SelectDateIntent(this.context);
 }
 
-class SelectIntervalIntent extends BookingIntents {
+class SelectStartTimeIntent extends BookingIntents {
   final BuildContext context;
 
-  SelectIntervalIntent(this.context);
+  SelectStartTimeIntent(this.context);
 }
 
-class ConfirmBookingIntent extends BookingIntents {}
+class SelectEndTimeIntent extends BookingIntents {
+  final BuildContext context;
 
-class GetBookingsOfRoomIntent extends BookingIntents {}
+  SelectEndTimeIntent(this.context);
+}
+
+class ConfirmBookingIntent extends BookingIntents {
+  final int roomId;
+
+  ConfirmBookingIntent({required this.roomId});
+}
+
+class GetBookingsOfRoomIntent extends BookingIntents {
+  final int roomId;
+
+  GetBookingsOfRoomIntent({required this.roomId});
+}

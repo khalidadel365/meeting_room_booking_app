@@ -1,26 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../domain/use_cases/create_booking_use_case.dart';
+import '../../../domain/use_cases/get_bookings_use_case.dart';
 import '../intent/booking_intents.dart';
 import '../state/booking_state.dart';
 
 class BookingCubit extends Cubit<BookingStates> {
-  BookingCubit() : super(BookingInitial());
+  final GetBookingsUseCase getBookingsUseCase;
+  final CreateBookingUseCase createBookingUseCase;
+
+  BookingCubit({
+    required this.getBookingsUseCase,
+    required this.createBookingUseCase,
+  }) : super(BookingInitial());
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
-  final TextEditingController intervalController = TextEditingController();
+  final TextEditingController startTimeController = TextEditingController();
+  final TextEditingController endTimeController = TextEditingController();
 
   void handleIntent(BookingIntents intent) {
     if (intent is SelectDateIntent) {
       _selectDate(intent.context);
-    } else if (intent is SelectIntervalIntent) {
-      _selectInterval(intent.context);
+    } else if (intent is SelectStartTimeIntent) {
+      _selectTime(intent.context, startTimeController);
+    } else if (intent is SelectEndTimeIntent) {
+      _selectTime(intent.context, endTimeController);
     } else if (intent is ConfirmBookingIntent) {
-      _confirmBooking();
+      _confirmBooking(intent.roomId);
     } else if (intent is GetBookingsOfRoomIntent) {
-      _getBookingsOfRoom();
+      _getBookingsOfRoom(intent.roomId);
     }
+  }
+
+  Future<void> _selectTime(
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
+    TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
+    if (picked != null) {
+      final String formattedTime =
+          "${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}";
+      controller.text = formattedTime;
+    }
+  }
+
+  Future<void> _getBookingsOfRoom(int roomId) async {
+    emit(GetBookingsLoading());
+    final result = await getBookingsUseCase(roomId);
+
+    result.fold(
+      (failure) => emit(GetBookingsError(failure.errorMessage)),
+      (bookings) => emit(GetBookingsSuccess(bookings)),
+    );
+  }
+
+  Future<void> _confirmBooking(int roomId) async {
+    emit(CreateBookingLoading());
+
+    final result = await createBookingUseCase(
+      roomId: roomId,
+      date: dateController.text,
+      startTime: startTimeController.text,
+      endTime: endTimeController.text,
+      userName: nameController.text,
+    );
+
+    result.fold((failure) => emit(CreateBookingError(failure.errorMessage)), (
+      newBooking,
+    ) {
+      emit(CreateBookingSuccess(newBooking));
+      _clearControllers();
+    });
+  }
+
+  void _clearControllers() {
+    nameController.clear();
+    dateController.clear();
+    startTimeController.clear();
+    endTimeController.clear();
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -35,41 +97,12 @@ class BookingCubit extends Cubit<BookingStates> {
     }
   }
 
-  Future<void> _selectInterval(BuildContext context) async {
-    TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (picked != null) {
-      intervalController.text = picked.format(context);
-    }
-  }
-
-  Future<void> _confirmBooking() async {
-    emit(BookingLoading());
-    try {
-      await Future.delayed(const Duration(seconds: 2));
-      emit(BookingSuccess());
-    } catch (e) {
-      emit(BookingError(e.toString()));
-    }
-  }
-
-  Future<void> _getBookingsOfRoom() async {
-    emit(BookingLoading());
-    try {
-      await Future.delayed(const Duration(seconds: 2));
-      emit(BookingSuccess());
-    } catch (e) {
-      emit(BookingError(e.toString()));
-    }
-  }
-
   @override
   Future<void> close() {
     nameController.dispose();
     dateController.dispose();
-    intervalController.dispose();
+    startTimeController.dispose();
+    endTimeController.dispose();
     return super.close();
   }
 }
