@@ -89,6 +89,7 @@ class BookingCubit extends Cubit<BookingStates> {
   Future<void> _confirmBooking(int roomId) async {
     if (isReserved()) {
       emit(CreateBookingError("This time slot is already booked"));
+      emit(GetBookingsSuccess(_allBookings));
       return;
     }
 
