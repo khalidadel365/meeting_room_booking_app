@@ -6,11 +6,14 @@ import 'package:meeting_room_booking_app/core/values/app_strings.dart';
 
 import '../../view_model/cubit/booking_cubit.dart';
 import '../../view_model/intent/booking_intents.dart';
+import '../../view_model/state/booking_state.dart';
 import 'booking_details_section.dart';
 import 'booking_sliver_list.dart';
 
 class BookingViewBody extends StatelessWidget {
-  const BookingViewBody({super.key});
+  const BookingViewBody({super.key, required this.roomId});
+
+  final int roomId;
 
   @override
   Widget build(BuildContext context) {
@@ -24,15 +27,28 @@ class BookingViewBody extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                BookingDetailsSection(
-                  nameController: cubit.nameController,
-                  dateController: cubit.dateController,
-                  intervalController: cubit.intervalController,
-                  onDateTap: () =>
-                      cubit.handleIntent(SelectDateIntent(context)),
-                  onIntervalTap: () =>
-                      cubit.handleIntent(SelectIntervalIntent(context)),
-                  onConfirm: () => cubit.handleIntent(ConfirmBookingIntent()),
+                BlocBuilder<BookingCubit, BookingStates>(
+                  buildWhen: (previous, current) =>
+                  current is CreateBookingLoading ||
+                      current is CreateBookingSuccess ||
+                      current is CreateBookingError,
+                  builder: (context, state) {
+                    return BookingDetailsSection(
+                      nameController: cubit.nameController,
+                      dateController: cubit.dateController,
+                      startTimeController: cubit.startTimeController,
+                      endTimeController: cubit.endTimeController,
+                      isLoading: state is CreateBookingLoading,
+                      onDateTap: () =>
+                          cubit.handleIntent(SelectDateIntent(context)),
+                      onStartTimeTap: () =>
+                          cubit.handleIntent(SelectStartTimeIntent(context)),
+                      onEndTimeTap: () =>
+                          cubit.handleIntent(SelectEndTimeIntent(context)),
+                      onConfirm: () =>
+                          cubit.handleIntent(ConfirmBookingIntent(roomId: roomId)),
+                    );
+                  },
                 ),
                 const SizedBox(height: 15),
                 Text(

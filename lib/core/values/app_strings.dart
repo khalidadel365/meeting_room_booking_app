@@ -8,7 +8,17 @@ class AppStrings {
   static const String reservedBy = 'Reserved By';
   static const String reserveRoom = 'Reserve Room';
   static const String userName = 'User Name';
+  static const String enterYourName = 'Enter your name';
+  static const String nameIsRequired = "Name is required";
+  static const String dateIsRequired = "Date is required";
+  static const String startTimeIsRequired = "Start time is required";
+  static const String endTimeIsRequired = "End time is required";
   static const String reservationDate = 'Reservation Date';
+  static const String selectDate = 'Select Date';
+  static const String processBooking = 'Process Booking';
+  static const String startTime = 'Start Time';
+  static const String endTime = 'End Time';
+  static const String hintTime = '00:00';
   static const String reservationTime = 'Reservation Time';
   static const String currentBookings = 'Current Bookings';
   static const String confirmBooking = 'Confirm Booking';

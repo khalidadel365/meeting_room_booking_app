@@ -11,18 +11,24 @@ class BookingDetailsSection extends StatelessWidget {
     super.key,
     required this.nameController,
     required this.dateController,
-    required this.intervalController,
+    required this.startTimeController,
+    required this.endTimeController,
     this.onDateTap,
-    this.onIntervalTap,
+    this.onStartTimeTap,
+    this.onEndTimeTap,
     this.onConfirm,
+    this.isLoading = false,
   });
 
   final TextEditingController nameController;
   final TextEditingController dateController;
-  final TextEditingController intervalController;
+  final TextEditingController startTimeController;
+  final TextEditingController endTimeController;
   final VoidCallback? onDateTap;
-  final VoidCallback? onIntervalTap;
+  final VoidCallback? onStartTimeTap;
+  final VoidCallback? onEndTimeTap;
   final VoidCallback? onConfirm;
+  final bool isLoading;
 
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -52,64 +58,101 @@ class BookingDetailsSection extends StatelessWidget {
               _buildFieldLabel(AppStrings.userName),
               CustomTextFormField(
                 controller: nameController,
-                hintText: "Enter your name",
+                hintText: AppStrings.enterYourName,
                 suffixIcon: const Icon(
                   Icons.person,
                   color: AppColors.primaryColor,
                   size: 20,
                 ),
-                validate: (value) {
-                  if (value == null || value.isEmpty) return "Name is required";
-                  return null;
-                },
+                validate: (value) => (value == null || value.isEmpty)
+                    ? AppStrings.nameIsRequired
+                    : null,
               ),
               const SizedBox(height: 15),
               _buildFieldLabel(AppStrings.reservationDate),
               CustomTextFormField(
                 controller: dateController,
                 readOnly: true,
-                hintText: "Select Date",
+                hintText: AppStrings.selectDate,
                 onTap: onDateTap,
                 suffixIcon: const Icon(
                   Icons.calendar_month,
                   color: AppColors.primaryColor,
                   size: 20,
                 ),
-                validate: (value) {
-                  if (value == null || value.isEmpty) return "Date is required";
-                  return null;
-                },
+                validate: (value) => (value == null || value.isEmpty)
+                    ? AppStrings.dateIsRequired
+                    : null,
               ),
               const SizedBox(height: 15),
-              _buildFieldLabel(AppStrings.selectedInterval),
-              CustomTextFormField(
-                controller: intervalController,
-                readOnly: true,
-                hintText: 'Select Interval',
-                onTap: onIntervalTap,
-                suffixIcon: const Icon(
-                  Icons.access_time_filled_rounded,
-                  color: AppColors.primaryColor,
-                  size: 20,
-                ),
-                validate: (value) {
-                  if (value == null || value.isEmpty) return "Time is required";
-                  return null;
-                },
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildFieldLabel(AppStrings.startTime),
+                        CustomTextFormField(
+                          controller: startTimeController,
+                          readOnly: true,
+                          hintText: AppStrings.hintTime,
+                          onTap: onStartTimeTap,
+                          suffixIcon: const Icon(
+                            Icons.access_time_filled_rounded,
+                            color: AppColors.primaryColor,
+                            size: 20,
+                          ),
+                          validate: (value) => (value == null || value.isEmpty)
+                              ? AppStrings.startTimeIsRequired
+                              : null,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildFieldLabel(AppStrings.endTime),
+                        CustomTextFormField(
+                          controller: endTimeController,
+                          readOnly: true,
+                          hintText: AppStrings.hintTime,
+                          onTap: onEndTimeTap,
+                          suffixIcon: const Icon(
+                            Icons.access_time_filled_rounded,
+                            color: AppColors.primaryColor,
+                            size: 20,
+                          ),
+                          validate: (value) => (value == null || value.isEmpty)
+                              ? AppStrings.endTimeIsRequired
+                              : null,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 30),
               CustomButton(
                 width: double.infinity,
-                text: AppStrings.confirmBooking,
+                text: isLoading
+                    ? AppStrings.processBooking
+                    : AppStrings.confirmBooking,
                 textStyle: AppTextStyles.textStyleMedium16.copyWith(
                   color: AppColors.whiteColor,
                 ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    onConfirm?.call();
-                  }
-                },
-                backgroundColor: AppColors.primaryColor,
+                onPressed: isLoading
+                    ? null
+                    : () {
+                        if (_formKey.currentState!.validate()) {
+                          onConfirm?.call();
+                        }
+                      },
+                backgroundColor: isLoading
+                    ? Colors.grey
+                    : AppColors.primaryColor,
                 borderRadius: 15,
               ),
             ],

@@ -67,7 +67,7 @@ class RoomItem extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const BookingView(roomId: 1),
+                      builder: (context) => BookingView(roomId: room.id),
                     ),
                   );
                 },
