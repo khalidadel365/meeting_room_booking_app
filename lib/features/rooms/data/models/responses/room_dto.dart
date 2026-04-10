@@ -1,3 +1,5 @@
+import '../../../domain/entity/room_entity.dart';
+
 class RoomDto {
   final int? id;
   final String? status;
@@ -34,6 +36,15 @@ class RoomDto {
       dateUpdated: json["date_updated"],
       name: json["name"],
       capacity: json["capacity"],
+    );
+  }
+
+  RoomEntity toDomain() {
+    return RoomEntity(
+      id: id ?? 0,
+      name: name ?? 'Unknown',
+      capacity: capacity ?? 0,
+      status: status ?? 'No Status',
     );
   }
 
