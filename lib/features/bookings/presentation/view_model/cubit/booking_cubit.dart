@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../domain/entity/booking_entity.dart';
 import '../../../domain/use_cases/create_booking_use_case.dart';
 import '../../../domain/use_cases/get_bookings_use_case.dart';
 import '../intent/booking_intents.dart';
@@ -19,6 +20,8 @@ class BookingCubit extends Cubit<BookingStates> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController startTimeController = TextEditingController();
   final TextEditingController endTimeController = TextEditingController();
+
+  List<BookingEntity> _allBookings = [];
 
   void handleIntent(BookingIntents intent) {
     if (intent is SelectDateIntent) {
@@ -44,7 +47,7 @@ class BookingCubit extends Cubit<BookingStates> {
     );
     if (picked != null) {
       final String formattedTime =
-          "${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}";
+          "${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}:00";
       controller.text = formattedTime;
     }
   }
@@ -53,13 +56,42 @@ class BookingCubit extends Cubit<BookingStates> {
     emit(GetBookingsLoading());
     final result = await getBookingsUseCase(roomId);
 
-    result.fold(
-      (failure) => emit(GetBookingsError(failure.errorMessage)),
-      (bookings) => emit(GetBookingsSuccess(bookings)),
-    );
+    result.fold((failure) => emit(GetBookingsError(failure.errorMessage)), (
+      bookings,
+    ) {
+      _allBookings = bookings;
+      emit(GetBookingsSuccess(bookings));
+    });
+  }
+
+  int convertTime(String time) {
+    var parts = time.split(':');
+    return int.parse(parts[0] + parts[1]);
+  }
+
+  bool isReserved() {
+    int myStart = convertTime(startTimeController.text);
+    int myEnd = convertTime(endTimeController.text);
+
+    for (var booking in _allBookings) {
+      if (booking.date == dateController.text) {
+        int hisStart = convertTime(booking.startTime);
+        int hisEnd = convertTime(booking.endTime);
+
+        if (myStart < hisEnd && myEnd > hisStart) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   Future<void> _confirmBooking(int roomId) async {
+    if (isReserved()) {
+      emit(CreateBookingError("This time slot is already booked"));
+      return;
+    }
+
     emit(CreateBookingLoading());
 
     final result = await createBookingUseCase(
