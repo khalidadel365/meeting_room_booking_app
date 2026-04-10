@@ -9,7 +9,9 @@ import '../view_model/cubit/booking_cubit.dart';
 import '../view_model/intent/booking_intents.dart';
 
 class BookingView extends StatelessWidget {
-  const BookingView({super.key});
+  const BookingView({super.key, required this.roomId});
+
+  final int roomId;
 
   @override
   Widget build(BuildContext context) {
