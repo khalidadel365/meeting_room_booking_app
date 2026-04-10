@@ -2,7 +2,7 @@ import '../../../domain/entity/room_entity.dart';
 
 abstract class RoomsState {}
 
-class RoomsInitial extends RoomsState {}
+class FetchRoomsInitial extends RoomsState {}
 
 class FetchRoomsLoading extends RoomsState {}
 

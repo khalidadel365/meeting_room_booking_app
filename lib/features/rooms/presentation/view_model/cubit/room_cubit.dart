@@ -7,7 +7,7 @@ import '../state/room_state.dart';
 class RoomsCubit extends Cubit<RoomsState> {
   final GetRoomsUseCase getRoomsUseCase;
 
-  RoomsCubit(this.getRoomsUseCase) : super(RoomsInitial());
+  RoomsCubit(this.getRoomsUseCase) : super(FetchRoomsInitial());
 
   void handleIntent(RoomIntents intent) {
     if (intent is GetAllRoomsIntent) {

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_room_booking_app/core/theme/app_colors.dart';
 import 'package:meeting_room_booking_app/core/theme/app_text_styles.dart';
 import 'package:meeting_room_booking_app/core/values/app_strings.dart';
 
+import '../../view_model/cubit/booking_cubit.dart';
+import '../../view_model/intent/booking_intents.dart';
 import 'booking_details_section.dart';
 import 'booking_sliver_list.dart';
 
@@ -11,9 +14,7 @@ class BookingViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController dateController = TextEditingController();
-    final TextEditingController nameController = TextEditingController();
-    final TextEditingController intervalController = TextEditingController();
+    final cubit = context.read<BookingCubit>();
 
     return CustomScrollView(
       slivers: [
@@ -24,9 +25,14 @@ class BookingViewBody extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 BookingDetailsSection(
-                  dateController: dateController,
-                  nameController: nameController,
-                  intervalController: intervalController,
+                  nameController: cubit.nameController,
+                  dateController: cubit.dateController,
+                  intervalController: cubit.intervalController,
+                  onDateTap: () =>
+                      cubit.handleIntent(SelectDateIntent(context)),
+                  onIntervalTap: () =>
+                      cubit.handleIntent(SelectIntervalIntent(context)),
+                  onConfirm: () => cubit.handleIntent(ConfirmBookingIntent()),
                 ),
                 const SizedBox(height: 15),
                 Text(
@@ -40,7 +46,7 @@ class BookingViewBody extends StatelessWidget {
             ),
           ),
         ),
-        BookingSliverList(),
+        const BookingSliverList(),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
       ],
     );

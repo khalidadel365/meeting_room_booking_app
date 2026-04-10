@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meeting_room_booking_app/features/bookings/presentation/views/widgets/booking_view_body.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/values/app_strings.dart';
+import '../view_model/cubit/booking_cubit.dart';
+import '../view_model/intent/booking_intents.dart';
 
 class BookingView extends StatelessWidget {
   const BookingView({super.key});
@@ -26,7 +29,11 @@ class BookingView extends StatelessWidget {
           style: AppTextStyles.textStyleBold21,
         ),
       ),
-      body: BookingViewBody(),
+      body: BlocProvider(
+        create: (context) =>
+            BookingCubit()..handleIntent(GetBookingsOfRoomIntent()),
+        child: const BookingViewBody(),
+      ),
     );
   }
 }
