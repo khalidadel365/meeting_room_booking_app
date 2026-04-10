@@ -7,15 +7,21 @@ import '../../../../../core/widgets/custom_button.dart';
 import '../../../../../core/widgets/custom_textformfield.dart';
 
 class BookingDetailsSection extends StatelessWidget {
-  const BookingDetailsSection({super.key, required this.DateController});
+  const BookingDetailsSection({
+    super.key,
+    required this.nameController,
+    required this.dateController,
+    required this.intervalController,
+  });
 
-  final TextEditingController DateController;
+  final TextEditingController nameController;
+  final TextEditingController dateController;
+  final TextEditingController intervalController;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: MediaQuery.sizeOf(context).height * 0.512,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
@@ -24,6 +30,7 @@ class BookingDetailsSection extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               AppStrings.bookingDetails,
@@ -32,40 +39,25 @@ class BookingDetailsSection extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Text(
-              AppStrings.userName,
-              style: AppTextStyles.textStyleBold15.copyWith(
-                color: AppColors.greyColor,
-              ),
-            ),
-            const SizedBox(height: 5),
+
+            _buildFieldLabel(AppStrings.userName),
             CustomTextFormField(
-              controller: DateController,
-              hintText: "Khalid Adel",
-              hintTextStyle: AppTextStyles.textStyleMedium16.copyWith(
-                color: AppColors.greyColor[600],
-              ),
+              controller: nameController,
+              hintText: "Enter your name",
               suffixIcon: Icon(
                 Icons.person,
                 color: AppColors.primaryColor,
                 size: 20,
               ),
-              onTap: () {},
             ),
+
             const SizedBox(height: 15),
-            Text(
-              AppStrings.reservationDate,
-              style: AppTextStyles.textStyleBold15.copyWith(
-                color: AppColors.greyColor,
-              ),
-            ),
-            const SizedBox(height: 5),
+
+            _buildFieldLabel(AppStrings.reservationDate),
             CustomTextFormField(
-              controller: DateController,
-              hintText: "2026-04-20",
-              hintTextStyle: AppTextStyles.textStyleMedium16.copyWith(
-                color: AppColors.greyColor[600],
-              ),
+              controller: dateController,
+              readOnly: true,
+              hintText: "Select Date",
               suffixIcon: Icon(
                 Icons.calendar_month,
                 color: AppColors.primaryColor,
@@ -73,20 +65,14 @@ class BookingDetailsSection extends StatelessWidget {
               ),
               onTap: () {},
             ),
+
             const SizedBox(height: 15),
-            Text(
-              AppStrings.selectedInterval,
-              style: AppTextStyles.textStyleBold15.copyWith(
-                color: AppColors.greyColor,
-              ),
-            ),
-            const SizedBox(height: 5),
+
+            _buildFieldLabel(AppStrings.selectedInterval),
             CustomTextFormField(
-              controller: DateController,
-              hintText: '10:00 AM - 11:00 AM',
-              hintTextStyle: AppTextStyles.textStyleMedium16.copyWith(
-                color: AppColors.greyColor[600],
-              ),
+              controller: intervalController,
+              readOnly: true,
+              hintText: 'Select Interval',
               suffixIcon: Icon(
                 Icons.access_time_filled_rounded,
                 color: AppColors.primaryColor,
@@ -94,18 +80,32 @@ class BookingDetailsSection extends StatelessWidget {
               ),
               onTap: () {},
             ),
-            const Spacer(),
+
+            const SizedBox(height: 30),
+
             CustomButton(
               width: double.infinity,
               text: AppStrings.confirmBooking,
               textStyle: AppTextStyles.textStyleMedium16.copyWith(
                 color: AppColors.whiteColor,
               ),
-              backgroundColor: AppColors.primaryColor,
-              borderRadius: 12,
               onPressed: () {},
+              backgroundColor: AppColors.primaryColor,
+              borderRadius: 15,
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFieldLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: Text(
+        label,
+        style: AppTextStyles.textStyleBold15.copyWith(
+          color: AppColors.greyColor[600],
         ),
       ),
     );
