@@ -1,13 +1,33 @@
+import '../../../domain/entity/booking_entity.dart';
+
 abstract class BookingStates {}
 
 class BookingInitial extends BookingStates {}
 
-class BookingLoading extends BookingStates {}
+class GetBookingsLoading extends BookingStates {}
 
-class BookingSuccess extends BookingStates {}
+class GetBookingsSuccess extends BookingStates {
+  final List<BookingEntity> bookings;
 
-class BookingError extends BookingStates {
+  GetBookingsSuccess(this.bookings);
+}
+
+class GetBookingsError extends BookingStates {
   final String message;
 
-  BookingError(this.message);
+  GetBookingsError(this.message);
+}
+
+class CreateBookingLoading extends BookingStates {}
+
+class CreateBookingSuccess extends BookingStates {
+  final BookingEntity newBooking;
+
+  CreateBookingSuccess(this.newBooking);
+}
+
+class CreateBookingError extends BookingStates {
+  final String message;
+
+  CreateBookingError(this.message);
 }
