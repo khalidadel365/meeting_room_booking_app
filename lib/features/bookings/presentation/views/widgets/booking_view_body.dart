@@ -26,7 +26,7 @@ class BookingViewBody extends StatelessWidget {
           showSnackBar(
             context: context,
             message: "Booking Confirmed Successfully!",
-            color: Colors.green,
+            color: AppColors.primaryColor,
           );
         } else if (state is CreateBookingError) {
           showSnackBar(
