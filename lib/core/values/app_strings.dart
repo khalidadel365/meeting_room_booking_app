@@ -15,4 +15,6 @@ class AppStrings {
   static const String bookingDetails = 'BOOKING DETAILS';
   static const String scheduleOverview = 'Schedule Overview';
   static const String selectedInterval = 'Selected Interval';
+  static const String somethingWentWrong =
+      'Something went wrong. Please try again.';
 }
