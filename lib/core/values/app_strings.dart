@@ -14,4 +14,5 @@ class AppStrings {
   static const String confirmBooking = 'Confirm Booking';
   static const String bookingDetails = 'BOOKING DETAILS';
   static const String scheduleOverview = 'Schedule Overview';
+  static const String selectedInterval = 'Selected Interval';
 }

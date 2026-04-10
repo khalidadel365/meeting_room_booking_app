@@ -4,6 +4,7 @@ import 'package:meeting_room_booking_app/core/values/app_strings.dart';
 import 'package:meeting_room_booking_app/core/widgets/custom_button.dart';
 
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../bookings/presentation/views/booking_view.dart';
 import '../../../domain/entity/room_entity.dart';
 
 class RoomItem extends StatelessWidget {
@@ -62,7 +63,14 @@ class RoomItem extends StatelessWidget {
                 textStyle: AppTextStyles.textStyleBold15.copyWith(
                   color: AppColors.whiteColor,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BookingView(),
+                    ),
+                  );
+                },
               ),
             ),
           ],
