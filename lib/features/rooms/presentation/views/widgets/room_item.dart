@@ -4,9 +4,12 @@ import 'package:meeting_room_booking_app/core/values/app_strings.dart';
 import 'package:meeting_room_booking_app/core/widgets/custom_button.dart';
 
 import '../../../../../core/theme/app_colors.dart';
+import '../../../domain/entity/room_entity.dart';
 
 class RoomItem extends StatelessWidget {
-  const RoomItem({super.key});
+  final RoomEntity room;
+
+  const RoomItem({super.key, required this.room});
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +31,23 @@ class RoomItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('A', style: AppTextStyles.textStyleSemiBold45),
+            Text(room.name, style: AppTextStyles.textStyleSemiBold45),
             const SizedBox(height: 8),
             Row(
               children: [
                 Icon(Icons.people, color: AppColors.iconColor, size: 24),
                 const SizedBox(width: 8),
-                Text('capacity: 10', style: AppTextStyles.textStyleSemiBold15),
+                Text(
+                  '${AppStrings.capacity}: ${room.capacity}',
+                  style: AppTextStyles.textStyleSemiBold15,
+                ),
                 const Spacer(),
                 Icon(Icons.analytics, color: AppColors.primaryColor, size: 24),
                 const SizedBox(width: 8),
-                Text('status: draft', style: AppTextStyles.textStyleSemiBold15),
+                Text(
+                  '${AppStrings.status}: ${room.status}',
+                  style: AppTextStyles.textStyleSemiBold15,
+                ),
               ],
             ),
             const Spacer(),
