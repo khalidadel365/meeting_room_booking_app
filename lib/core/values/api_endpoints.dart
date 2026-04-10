@@ -5,4 +5,5 @@ class ApiEndpoints {
 
   static const String rooms = 'items/rooms';
   static const String bookings = 'items/bookings';
+  static const String roomIdFilter = 'filter[room_id][_eq]';
 }

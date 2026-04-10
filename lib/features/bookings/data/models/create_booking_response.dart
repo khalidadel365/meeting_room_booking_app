@@ -7,9 +7,7 @@ class CreateBookingResponse {
 
   factory CreateBookingResponse.fromJson(Map<String, dynamic> json) {
     return CreateBookingResponse(
-      data: json["data"] == null
-          ? null
-          : BookingDto.fromJson(json["data"]),
+      data: json["data"] == null ? null : BookingDto.fromJson(json["data"]),
     );
   }
 }
