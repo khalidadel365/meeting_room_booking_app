@@ -18,7 +18,7 @@ abstract class BookingRemoteDataSource {
 class BookingRemoteDataSourceImpl implements BookingRemoteDataSource {
   final ApiService apiService;
 
-  BookingRemoteDataSourceImpl(this.apiService);
+  BookingRemoteDataSourceImpl({required this.apiService});
 
   @override
   Future<BookingResponse> getBookings(int roomId) async {
